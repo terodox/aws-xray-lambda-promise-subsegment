@@ -1,0 +1,1 @@
+export declare function addPromiseSegment<T>(subSegmentName: string, promiseToWrap: Promise<T>);

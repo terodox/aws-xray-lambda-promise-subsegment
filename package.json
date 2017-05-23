@@ -1,0 +1,42 @@
+{
+  "name": "aws-xray-lambda-promise-subsegment",
+  "version": "1.0.0",
+  "description": "Allows adding a subsegment to XRay around any promise",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./test/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/terodox/aws-xray-lambda-promise-subsegment.git"
+  },
+  "keywords": [
+    "aws",
+    "lambda",
+    "xray",
+    "sdk",
+    "promise",
+    "segment",
+    "subsegment",
+    "tracing",
+    "awslambda",
+    "awsxray",
+    "awssdk"
+  ],
+  "author": "Andy Desmarais <terodoxnpm@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/terodox/aws-xray-lambda-promise-subsegment/issues"
+  },
+  "homepage": "https://github.com/terodox/aws-xray-lambda-promise-subsegment#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "mocha": "^3.4.1",
+    "proxyquire": "^1.8.0",
+    "sinon": "^2.3.1"
+  },
+  "dependencies": {
+    "aws-xray-sdk": "^1.1.1"
+  }
+}
