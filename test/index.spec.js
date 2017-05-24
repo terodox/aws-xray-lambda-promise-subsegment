@@ -27,7 +27,7 @@ describe("addPromiseSegment", function () {
 
     before(() => {
         const subSegment = {
-            addErrorFlag: () => {},
+            addError: () => {},
             close: () => {}
         };
         captureAsyncFuncValidation = (name, funcToInvoke) => { funcToInvoke(subSegment); };
@@ -62,7 +62,7 @@ describe("addPromiseSegment", function () {
 
     it("call close on subSegment when promise rejects", (done) => {
         const subSegment = {
-            addErrorFlag: () => {},
+            addError: () => {},
             close: () => {
                 done();
             }
@@ -74,9 +74,9 @@ describe("addPromiseSegment", function () {
         addPromiseSegment(segmentName, Promise.reject());
     });
 
-    it("call addErrorFlag on subSegment when promise rejects", (done) => {
+    it("call addError on subSegment when promise rejects", (done) => {
         const subSegment = {
-            addErrorFlag: () => {
+            addError: () => {
                 done();
             },
             close: () => {}
@@ -90,7 +90,7 @@ describe("addPromiseSegment", function () {
 
     it("call close on subSegment when promise resolves", (done) => {
         const subSegment = {
-            addErrorFlag: () => {},
+            addError: () => {},
             close: () => {
                 done();
             }
@@ -100,5 +100,63 @@ describe("addPromiseSegment", function () {
         };
 
         addPromiseSegment(segmentName, Promise.resolve());
+    });
+
+    it("adds metadata to subSegment if any is provided", (done) => {
+        const metadata = {
+            "one": 1,
+            "two": "22",
+            "three": 333
+        };
+        let callCount = 0;
+
+        const subSegment = {
+            addError: () => {},
+            close: () => {},
+            addMetadata: (key, value) => {
+                callCount++;
+                assert.equal(metadata[key], value);
+                if(callCount > 3) {
+                    done(new Error("Called add metadata too many times"));
+                }
+                if(callCount === 3) {
+                    done();
+                }
+            }
+        };
+        captureAsyncFuncValidation = (name, func) => {
+            func(subSegment);
+        };
+
+        addPromiseSegment(segmentName, Promise.resolve(), metadata);
+    });
+
+    it("adds annotations to subSegment if any is provided", (done) => {
+        const annotations = {
+            "one": 1,
+            "two": "22",
+            "three": 333
+        };
+        let callCount = 0;
+
+        const subSegment = {
+            addError: () => {},
+            close: () => {},
+            addAnnotation: (key, value) => {
+                callCount++;
+                assert.equal(annotations[key], value);
+                if(callCount > 3) {
+                    done(new Error("Called add annotations too many times"));
+                }
+                if(callCount === 3) {
+                    done();
+                }
+            }
+        };
+        captureAsyncFuncValidation = (name, func) => {
+            func(subSegment);
+        };
+
+        addPromiseSegment(segmentName, Promise.resolve(), {}, annotations);
     });
 });
