@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/terodox/aws-xray-lambda-promise-subsegment.svg?branch=master)](https://travis-ci.org/terodox/aws-xray-lambda-promise-subsegment)
+
 # aws-xray-lambda-promise-subsegment
 Allows a new subsegment to be added to XRay around any promise
 
