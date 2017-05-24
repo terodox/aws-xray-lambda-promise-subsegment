@@ -2,22 +2,50 @@
 
 const XRay = require("aws-xray-sdk");
 
-module.exports.addPromiseSegment = function (segmentName, inputPromise) {
-    if(!(inputPromise instanceof Promise)) {
-        return Promise.reject(new Error("First parameter must be of type Promise"));
+function addMetadata(subSegment, metadata) {
+    if(metadata) {
+        for(const key in metadata) {
+            if(metadata.hasOwnProperty(key)) {
+                subSegment.addMetadata(key, metadata[key]);
+            }
+        }
     }
+}
+
+function addAnnotations(subSegment, annotations) {
+    if(annotations) {
+        for(const key in annotations) {
+            if(annotations.hasOwnProperty(key)) {
+                subSegment.addAnnotation(key, annotations[key]);
+            }
+        }
+    }
+}
+
+module.exports.addPromiseSegment = function (segmentName, inputPromise, metadata, annotations) {
     return new Promise((resolve, reject) => {
-        XRay.captureAsyncFunc(segmentName, (subSegment) => {
-            inputPromise
-                .then(val => {
-                    resolve(val);
-                    subSegment.close();
-                })
-                .catch(err => {
+        try {
+            XRay.captureAsyncFunc(segmentName, (subSegment) => {
+                try {
+                    addMetadata(subSegment, metadata);
+                    addAnnotations(subSegment, annotations);
+
+                    inputPromise
+                        .then(val => {
+                            resolve(val);
+                            subSegment.close();
+                        })
+                        .catch(err => {
+                            reject(err);
+                            subSegment.addError(err);
+                            subSegment.close();
+                        });
+                } catch(err) {
                     reject(err);
-                    subSegment.addErrorFlag();
-                    subSegment.close();
-                });
-        });
+                }
+            });
+        } catch (err) {
+            reject(err);
+        }
     });
 };
