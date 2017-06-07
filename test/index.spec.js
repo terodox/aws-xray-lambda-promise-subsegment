@@ -159,4 +159,29 @@ describe("addPromiseSegment", function () {
 
         addPromiseSegment(segmentName, Promise.resolve(), {}, annotations);
     });
+
+    it("handles xray being disabled", (done) => {
+        const annotations = {
+            "one": 1,
+            "two": "22",
+            "three": 333
+        };
+        let callCount = 0;
+
+        // when xray is disabled, captureAsyncFunc is called without a sub-segment
+        const subSegment = undefined;
+        
+        captureAsyncFuncValidation = (name, func) => {
+            func(subSegment);
+        };
+    
+        addPromiseSegment(segmentName, Promise.resolve(), {}, annotations)
+            .then(() => {
+                done();
+            }).catch((err) => {
+                done(new Error("Failed: " + err));
+            });
+    });
+    
+    
 });
