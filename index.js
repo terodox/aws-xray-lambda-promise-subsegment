@@ -27,19 +27,26 @@ module.exports.addPromiseSegment = function (segmentName, inputPromise, metadata
         try {
             XRay.captureAsyncFunc(segmentName, (subSegment) => {
                 try {
-                    addMetadata(subSegment, metadata);
-                    addAnnotations(subSegment, annotations);
 
-                    inputPromise
-                        .then(val => {
-                            resolve(val);
-                            subSegment.close();
-                        })
-                        .catch(err => {
-                            reject(err);
-                            subSegment.addError(err);
-                            subSegment.close();
-                        });
+                    if (!subSegment) {
+                        return inputPromise
+                            .then(val => resolve(val))
+                            .catch(err => reject(err));
+                    } else {
+                        addMetadata(subSegment, metadata);
+                        addAnnotations(subSegment, annotations);
+
+                        inputPromise
+                            .then(val => {
+                                resolve(val);
+                                subSegment.close();
+                            })
+                            .catch(err => {
+                                reject(err);
+                                subSegment.addError(err);
+                                subSegment.close();
+                            });
+                    }
                 } catch(err) {
                     reject(err);
                 }
