@@ -33,6 +33,10 @@ describe("addPromiseSegment", function () {
         captureAsyncFuncValidation = (name, funcToInvoke) => { funcToInvoke(subSegment); };
     });
 
+    beforeEach(() => { 
+        process.env.LAMBDA_TASK_ROOT = "Very root much task";        
+    });
+
     it("is a function", () => {
         assert.equal(typeof addPromiseSegment, typeof function () {});
     });
@@ -51,6 +55,12 @@ describe("addPromiseSegment", function () {
 
     it("resolves if passed promise resolves", () => {
         return assert.isFulfilled(addPromiseSegment(segmentName, Promise.resolve()));
+    });
+
+    it("will return passed promise if not running in a lambda", () => {
+        delete process.env.LAMBDA_TASK_ROOT;
+        const passedPromise = Promise.resolve({});
+        return assert.strictEqual(addPromiseSegment(segmentName, passedPromise), passedPromise);
     });
 
     it("calls XRay.captureAsyncFunc", (done) => {

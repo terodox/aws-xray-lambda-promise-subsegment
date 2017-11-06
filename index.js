@@ -23,6 +23,11 @@ function addAnnotations(subSegment, annotations) {
 }
 
 module.exports.addPromiseSegment = function (segmentName, inputPromise, metadata, annotations) {
+    if (!process.env.LAMBDA_TASK_ROOT) {
+        console.warn('WARNING: Skipping adding subsegment because we are not executing inside of aws lambda');
+        return inputPromise;
+    }
+
     return new Promise((resolve, reject) => {
         try {
             XRay.captureAsyncFunc(segmentName, (subSegment) => {
