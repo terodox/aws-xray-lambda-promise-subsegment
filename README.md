@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/terodox/aws-xray-lambda-promise-subsegment.svg?branch=master)](https://travis-ci.org/terodox/aws-xray-lambda-promise-subsegment)
 
+[![NPM](https://nodei.co/npm/aws-xray-lambda-promise-subsegment.png?compact=true)](https://npmjs.org/package/aws-xray-lambda-promise-subsegment)
+
 # aws-xray-lambda-promise-subsegment
 This will wrap an existing promise in a new promise that also creates a new subsegment in aws x-ray. It takes advantage of lambda already having an open trace to add a sub-segment to.
 
