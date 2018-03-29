@@ -37,6 +37,6 @@
     "sinon": "^4.0.0"
   },
   "dependencies": {
-    "aws-xray-sdk": "^1.1.1"
+    "aws-xray-sdk": "^1.2.0"
   }
 }
