@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/terodox/aws-xray-lambda-promise-subsegment#readme",
   "devDependencies": {
-    "chai": "^3.5.0",
+    "chai": "^4.0.0",
     "chai-as-promised": "^7.0.0",
     "mocha": "^5.0.0",
     "mock-require": "^3.0.1",
