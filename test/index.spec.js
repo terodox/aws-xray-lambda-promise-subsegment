@@ -1,20 +1,9 @@
 "use strict";
 
-let captureAsyncFuncValidation;
-require("proxyquire")(
-    "../index", {
-        "aws-xray-sdk" : {
-            captureAsyncFunc: (name, func) => {
-                captureAsyncFuncValidation(name, func);
-            }
-        }
-    }
-);
-
 const mocha = require("mocha");
+const mock = require("mock-require");
 const chai = require("chai");
 const chaiAsPromised = require("chai-as-promised");
-const addPromiseSegment = require("../index").addPromiseSegment;
 
 const describe = mocha.describe;
 const it = mocha.it;
@@ -23,7 +12,20 @@ chai.use(chaiAsPromised);
 const assert = chai.assert;
 
 describe("addPromiseSegment", function () {
+    let addPromiseSegment;
+    let captureAsyncFuncValidation;
     const segmentName = "woohoo";
+
+    before(() => {
+        mock("aws-xray-sdk", {
+            captureAsyncFunc: (name, func) => {
+                captureAsyncFuncValidation(name, func);
+            }
+        });
+        addPromiseSegment = mock.reRequire("../index").addPromiseSegment;
+    });
+    after(() => mock.stopAll());
+
 
     before(() => {
         const subSegment = {
@@ -33,8 +35,8 @@ describe("addPromiseSegment", function () {
         captureAsyncFuncValidation = (name, funcToInvoke) => { funcToInvoke(subSegment); };
     });
 
-    beforeEach(() => { 
-        process.env.LAMBDA_TASK_ROOT = "Very root much task";        
+    beforeEach(() => {
+        process.env.LAMBDA_TASK_ROOT = "Very root much task";
     });
 
     it("is a function", () => {
@@ -180,11 +182,11 @@ describe("addPromiseSegment", function () {
 
         // when xray is disabled, captureAsyncFunc is called without a sub-segment
         const subSegment = undefined;
-        
+
         captureAsyncFuncValidation = (name, func) => {
             func(subSegment);
         };
-    
+
         addPromiseSegment(segmentName, Promise.resolve(), {}, annotations)
             .then(() => {
                 done();
@@ -192,6 +194,6 @@ describe("addPromiseSegment", function () {
                 done(new Error("Failed: " + err));
             });
     });
-    
-    
+
+
 });
