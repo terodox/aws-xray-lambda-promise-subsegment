@@ -15,17 +15,17 @@ pipeline:
     commands:
       - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
       - npm install
-  test:
+  test6:
     image: node:6
     commands:
       - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
       - npm test
-  test:
+  test8:
     image: node:8
     commands:
       - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
       - npm test
-  test:
+  test10:
     image: node:10
     commands:
       - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
