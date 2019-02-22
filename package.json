@@ -4,6 +4,7 @@
   "description": "Allows adding a subsegment to XRay around any promise",
   "main": "index.js",
   "scripts": {
+    "postversion": "git push --follow-tags",
     "test": "mocha ./test/**/*.js"
   },
   "repository": {
