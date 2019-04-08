@@ -17,7 +17,7 @@ describe("addPromiseSegment", function () {
     const segmentName = "woohoo";
 
     before(() => {
-        mock("aws-xray-sdk", {
+        mock("aws-xray-sdk-core", {
             captureAsyncFunc: (name, func) => {
                 captureAsyncFuncValidation(name, func);
             }

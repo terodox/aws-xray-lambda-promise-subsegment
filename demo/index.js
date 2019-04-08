@@ -48,14 +48,18 @@ function addAnotherSubsegment(name, promiseFactory, parentSegment) {
 }
 
 async function nestedTracing() {
-    await runWithTracing(() => addAnotherSubsegment('layer 0', (parentSegment) => new Promise(resolve => {
+    await runWithTracing(() => addAnotherSubsegment('layer 0', (parentSegmentOne) => new Promise(resolve => {
         setTimeout(() => {
-            addAnotherSubsegment('layer 1', () => new Promise(innerResolve => {
-                setTimeout(() => {
-                    innerResolve();
-                    resolve();
-                }, 300);
-            }), parentSegment);
+            addAnotherSubsegment('layer 1', () => new Promise(innerResolveOne => {
+                setTimeout((parentSegmentTwo) =>
+                    addAnotherSubsegment('layer 2', () => new Promise(innerResolveTwo => {
+                        setTimeout(() => {
+                            innerResolveTwo();
+                            innerResolveOne();
+                            resolve();
+                        }, 300);
+                    }), parentSegmentTwo), 300);
+            }), parentSegmentOne);
         }, 300);
     })));
 }
