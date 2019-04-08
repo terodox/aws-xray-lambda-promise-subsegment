@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "postversion": "git push --follow-tags",
+    "start-daemon": "./scripts/run-daemon",
+    "start": "node ./demo/index.js",
     "test": "mocha ./test/**/*.js"
   },
   "repository": {
@@ -33,11 +35,13 @@
   "devDependencies": {
     "chai": "4.2.0",
     "chai-as-promised": "^7.0.0",
+    "enquirer": "2.3.0",
     "mocha": "6.1.1",
     "mock-require": "3.0.3",
     "sinon": "7.3.1"
   },
   "dependencies": {
+    "aws-xray-sdk-core": "2.2.0",
     "aws-xray-sdk": "2.2.0"
   }
 }

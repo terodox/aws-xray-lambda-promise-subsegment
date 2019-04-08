@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -e # Exit on any child process error
+
+docker pull amazon/aws-xray-daemon
+docker run \
+    --attach STDOUT \
+    -v ~/.aws/:/root/.aws/:ro \
+    -e AWS_REGION=eu-west-1 \
+    --name xray-daemon \
+    -p 2000:2000/udp \
+    --rm \
+    amazon/aws-xray-daemon -o
