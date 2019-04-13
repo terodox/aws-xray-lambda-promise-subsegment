@@ -23,14 +23,14 @@ function addAnnotations(subSegment, annotations) {
 }
 
 module.exports.addPromiseSegment = async function ({
-    __ignoreLambdaSafetyCheck,
+    __allowLambdaSafetyCheck,
     annotations,
     parentSegment,
     promiseFactory,
     metadata,
     segmentName,
 }) {
-    if (!process.env.LAMBDA_TASK_ROOT && !__ignoreLambdaSafetyCheck) {
+    if (!process.env.LAMBDA_TASK_ROOT) {
         console.warn('WARNING: Skipping adding subsegment because we are not executing inside of aws lambda');
         return promiseFactory();
     }

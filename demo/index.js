@@ -9,6 +9,8 @@ const AWSXRay = require('aws-xray-sdk-core');
 const addPromiseSegment = require('../index.v2.js').addPromiseSegment;
 const Enquirer = require('enquirer');
 
+process.env.LAMBDA_TASK_ROOT = 'The taskiest root of them all';
+
 async function runWithTracing(functionToHaveTraced) {
     return new Promise(resolve => {
         AWSXRay.setDaemonAddress('127.0.0.1:2000');

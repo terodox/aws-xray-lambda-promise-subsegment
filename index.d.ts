@@ -3,4 +3,12 @@ export interface Metadata {
 }
 export interface Annotations extends Metadata {}
 
-export declare function addPromiseSegment<T>(subSegmentName: string, promiseToWrap: Promise<T>, additionalMetaData?: Metadata, annotations?: Annotations): Promise<T>;
+export interface addPromiseSubsegmentOptions<T> {
+    annotations?: Annotations,
+    metaData?: Metadata,
+    parentSegment: object,
+    promiseFactory: () => Promise<T>,
+    subSegmentName: string,
+}
+
+export declare function addPromiseSegment<T>(options: addPromiseSubsegmentOptions<T>): Promise<T>;
