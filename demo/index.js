@@ -6,7 +6,7 @@ console.log('----------------------------------------');
 console.log('----------------------------------------');
 
 const AWSXRay = require('aws-xray-sdk-core');
-const addPromiseSegment = require('../index.v2.js').addPromiseSegment;
+const addPromiseSegment = require('../index.js').addPromiseSegment;
 const Enquirer = require('enquirer');
 
 process.env.LAMBDA_TASK_ROOT = 'The taskiest root of them all';

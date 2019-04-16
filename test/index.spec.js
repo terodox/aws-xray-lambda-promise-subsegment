@@ -23,7 +23,7 @@ describe("addPromiseSegment", function () {
                 captureAsyncFuncValidation(name, func);
             }
         });
-        addPromiseSegment = mock.reRequire("../index.v2").addPromiseSegment;
+        addPromiseSegment = mock.reRequire("../index").addPromiseSegment;
     });
     after(() => mock.stopAll());
 
