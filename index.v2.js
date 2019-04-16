@@ -23,7 +23,6 @@ function addAnnotations(subSegment, annotations) {
 }
 
 module.exports.addPromiseSegment = async function ({
-    __allowLambdaSafetyCheck,
     annotations,
     parentSegment,
     promiseFactory,

@@ -44,8 +44,7 @@ function addAnotherSubsegment(name, promiseFactory, parentSegment) {
         annotations: {
             sampleAnnotation: 'example'
         },
-        parentSegment,
-        __ignoreLambdaSafetyCheck: true
+        parentSegment
     });
 }
 
