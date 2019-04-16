@@ -14,7 +14,7 @@ export declare function addPromiseSegment<T>({
 }: {
     annotations?: Annotations,
     metaData?: Metadata,
-    parentSegment: object,
+    parentSegment?: object,
     promiseFactory: () => Promise<T>,
     subSegmentName: string
 }): Promise<T>;
