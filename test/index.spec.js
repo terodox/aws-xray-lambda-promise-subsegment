@@ -14,10 +14,11 @@ const assert = chai.assert;
 describe("addPromiseSegment", function () {
     let addPromiseSegment;
     let captureAsyncFuncValidation;
+    let options;
     const segmentName = "woohoo";
 
     before(() => {
-        mock("aws-xray-sdk", {
+        mock("aws-xray-sdk-core", {
             captureAsyncFunc: (name, func) => {
                 captureAsyncFuncValidation(name, func);
             }
@@ -37,39 +38,59 @@ describe("addPromiseSegment", function () {
 
     beforeEach(() => {
         process.env.LAMBDA_TASK_ROOT = "Very root much task";
+
+        options = {
+            annotations: {},
+            metadata: {},
+            parentSegment: {},
+            promiseFactory: () => Promise.resolve(),
+            segmentName
+        }
     });
 
     it("is a function", () => {
         assert.equal(typeof addPromiseSegment, typeof function () {});
     });
 
-    it("rejects if second param is not a promise", () => {
-        return assert.isRejected(addPromiseSegment(segmentName, "nope nope nope"));
+    it("rejects if promiseFactory is not a function", () => {
+        options.promiseFactory = {};
+
+        assert.isRejected(addPromiseSegment(options));
     });
 
     it("returns a promise", () => {
-        assert.instanceOf(addPromiseSegment(segmentName, Promise.resolve()), Promise);
+        assert.instanceOf(addPromiseSegment(options), Promise);
     });
 
-    it("rejects if passed promise rejects", () => {
-        return assert.isRejected(addPromiseSegment(segmentName, Promise.reject()));
+    it("rejects if passed promiseFactory promise rejects", () => {
+        options.promiseFactory = () => Promise.reject();
+
+        assert.isRejected(addPromiseSegment(options));
     });
 
     it("resolves if passed promise resolves", () => {
-        return assert.isFulfilled(addPromiseSegment(segmentName, Promise.resolve()));
+        options.promiseFactory = () => Promise.resolve();
+
+        return assert.isFulfilled(addPromiseSegment(options));
     });
 
-    it("will return passed promise if not running in a lambda", () => {
+    it("will return passed promise if not running in a lambda", async () => {
         delete process.env.LAMBDA_TASK_ROOT;
-        const passedPromise = Promise.resolve({});
-        return assert.strictEqual(addPromiseSegment(segmentName, passedPromise), passedPromise);
+        const passedPromise = Promise.resolve({Things: 'n stuff'});
+        options.promiseFactory = () => passedPromise;
+
+        captureAsyncFuncValidation = () => {
+            assert.fail('Should not be capturing anything!');
+        };
+
+        assert.strictEqual(await addPromiseSegment(options), await passedPromise);
     });
 
     it("calls XRay.captureAsyncFunc", (done) => {
         captureAsyncFuncValidation = () => {
             done();
         };
-        return assert.isFulfilled(addPromiseSegment(segmentName, Promise.resolve()));
+        assert.isFulfilled(addPromiseSegment(options));
     });
 
     it("call close on subSegment when promise rejects", (done) => {
@@ -83,21 +104,25 @@ describe("addPromiseSegment", function () {
             func(subSegment);
         };
 
-        addPromiseSegment(segmentName, Promise.reject());
+        addPromiseSegment(options);
     });
 
-    it("call addError on subSegment when promise rejects", (done) => {
+    it("close with error on subSegment when promise rejects", (done) => {
         const subSegment = {
-            addError: () => {
+            close: (error) => {
+                assert.ok(error);
                 done();
-            },
-            close: () => {}
+            }
         };
         captureAsyncFuncValidation = (name, func) => {
             func(subSegment);
         };
 
-        addPromiseSegment(segmentName, Promise.reject());
+        options.promiseFactory = () => Promise.reject({ boooom: 'goes the dynamite'});
+
+        addPromiseSegment(options).catch(() => {
+            //This is expected to throw but I hate unhandled exception warnings
+        });
     });
 
     it("call close on subSegment when promise resolves", (done) => {
@@ -111,7 +136,7 @@ describe("addPromiseSegment", function () {
             func(subSegment);
         };
 
-        addPromiseSegment(segmentName, Promise.resolve());
+        addPromiseSegment(options);
     });
 
     it("adds metadata to subSegment if any is provided", (done) => {
@@ -140,7 +165,9 @@ describe("addPromiseSegment", function () {
             func(subSegment);
         };
 
-        addPromiseSegment(segmentName, Promise.resolve(), metadata);
+        options.metadata = metadata;
+
+        addPromiseSegment(options);
     });
 
     it("adds annotations to subSegment if any is provided", (done) => {
@@ -169,7 +196,9 @@ describe("addPromiseSegment", function () {
             func(subSegment);
         };
 
-        addPromiseSegment(segmentName, Promise.resolve(), {}, annotations);
+        options.annotations = annotations;
+
+        addPromiseSegment(options);
     });
 
     it("handles xray being disabled", (done) => {
@@ -187,13 +216,13 @@ describe("addPromiseSegment", function () {
             func(subSegment);
         };
 
-        addPromiseSegment(segmentName, Promise.resolve(), {}, annotations)
+        options.annotations = annotations;
+
+        addPromiseSegment(options)
             .then(() => {
                 done();
             }).catch((err) => {
                 done(new Error("Failed: " + err));
             });
     });
-
-
 });
