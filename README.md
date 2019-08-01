@@ -22,7 +22,7 @@ const addPromiseSegment = require("aws-xray-lambda-promise-subsegment").addPromi
 
 const promiseWrappedInSubsegment = addPromiseSegment({
     segmentName: 'subSegmentName',
-    promiseFactory: promiseOfThingsFactory(),
+    promiseFactory: () => promiseOfThingsFactory(),
     metadata: {
         someMetadata1: greatValue,
         someMetadata2: amazingValue
@@ -40,7 +40,7 @@ import { addPromiseSegment } from "aws-xray-lambda-promise-subsegment";
 
 const promiseWrappedInSubsegment = addPromiseSegment({
     segmentName: 'subSegmentName',
-    promiseFactory: promiseOfThingsFactory(),
+    promiseFactory: () => promiseOfThingsFactory(),
     metadata: {
         someMetadata1: greatValue,
         someMetadata2: amazingValue
@@ -90,7 +90,7 @@ const promiseWrappedInSubsegment = addPromiseSegment({
         await doSomeWork();
         await addPromiseSegment({
             segmentName: 'subSegmentName',
-            promiseFactory: promiseOfThingsFactory(),
+            promiseFactory: () => promiseOfThingsFactory(),
             parentSegment
         });
         await doSomeMoreWork;
