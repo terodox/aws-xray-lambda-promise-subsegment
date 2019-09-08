@@ -1,0 +1,34 @@
+{
+    automergeType: "pr",
+    ignoreUnstable: true,
+    lockFileMaintenance: {
+        automerge: true
+    },
+    minor: {
+        automerge: true
+    },
+    packageRules: [
+        {
+            // This allows linters to version no matter what as long as checks pass
+            extends: [
+                "packages:linters"
+            ],
+            automerge: true
+        }
+    ],
+    patch: {
+        automerge: true
+    },
+    pin: {
+        // Allow automerging for updates that are pinning dependencies
+        automerge: true
+    },
+    rangeStrategy: "pin",
+    rebaseStalePrs: true,
+    requiredStatusChecks: [],
+    separateMajorMinor: true,
+    separateMinorPatch: false,
+    vulnerabilityAlerts: {
+        enabled: true
+    }
+}
