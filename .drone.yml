@@ -32,12 +32,22 @@ steps:
   - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
   - npm test
 
+- name: test12
+  pull: default
+  image: node:12
+  depends_on:
+  - install
+  commands:
+  - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
+  - npm test
+
 - name: deploy
   pull: default
   image: node:10
   depends_on:
   - test8
   - test10
+  - test12
   commands:
   - echo "//registry.npmjs.org/:_authToken=$${NPM_DEPLOY_TOKEN}" > ~/.npmrc
   - echo "unsafe-perm=true" >> ~/.npmrc
