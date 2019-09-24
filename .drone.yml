@@ -1,39 +1,50 @@
-#
-# temporary workaround for this bug:
-#   https://github.com/drone/drone/issues/2390
-clone:
-  git:
-    image: plugins/git:next
-    pull: true
-#
-# end workaround
-#
+---
+kind: pipeline
+name: default
 
-pipeline:
-  install:
-    image: node:10
-    commands:
-      - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
-      - npm ci
-  test8:
-    image: node:8
-    commands:
-      - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
-      - npm test
-  test10:
-    image: node:10
-    commands:
-      - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
-      - npm test
-  deploy:
-    image: node:10
-    commands:
-      - echo "//registry.npmjs.org/:_authToken=$${NPM_DEPLOY_TOKEN}" > ~/.npmrc
-      - echo "unsafe-perm=true" >> ~/.npmrc
-      - npm publish
-    secrets:
-      - npm_deploy_token
-    when:
-      event: tag
-      branch:
-        - include: [ v* ]
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: install
+  pull: default
+  image: node:10
+  commands:
+  - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
+  - npm ci
+
+- name: test8
+  pull: default
+  image: node:8
+  depends_on:
+  - install
+  commands:
+  - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
+  - npm test
+
+- name: test10
+  pull: default
+  image: node:10
+  depends_on:
+  - install
+  commands:
+  - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
+  - npm test
+
+- name: deploy
+  pull: default
+  image: node:10
+  depends_on:
+  - test8
+  - test10
+  commands:
+  - echo "//registry.npmjs.org/:_authToken=$${NPM_DEPLOY_TOKEN}" > ~/.npmrc
+  - echo "unsafe-perm=true" >> ~/.npmrc
+  - npm publish
+  environment:
+    NPM_DEPLOY_TOKEN:
+      from_secret: npm_deploy_token
+  when:
+    event:
+    - tag
