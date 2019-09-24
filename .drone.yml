@@ -6,9 +6,6 @@ platform:
   os: linux
   arch: amd64
 
-clone:
-  disable: true
-
 steps:
 - name: install
   pull: default
@@ -20,6 +17,8 @@ steps:
 - name: test8
   pull: default
   image: node:8
+  depends_on:
+  - install
   commands:
   - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
   - npm test
@@ -27,6 +26,8 @@ steps:
 - name: test10
   pull: default
   image: node:10
+  depends_on:
+  - install
   commands:
   - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
   - npm test
@@ -34,6 +35,9 @@ steps:
 - name: deploy
   pull: default
   image: node:10
+  depends_on:
+  - test8
+  - test10
   commands:
   - echo "//registry.npmjs.org/:_authToken=$${NPM_DEPLOY_TOKEN}" > ~/.npmrc
   - echo "unsafe-perm=true" >> ~/.npmrc
