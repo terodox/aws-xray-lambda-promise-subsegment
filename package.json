@@ -35,10 +35,10 @@
   "devDependencies": {
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
-    "enquirer": "2.3.1",
-    "mocha": "6.2.0",
+    "enquirer": "2.3.2",
+    "mocha": "6.2.1",
     "mock-require": "3.0.3",
-    "sinon": "7.4.2"
+    "sinon": "7.5.0"
   },
   "dependencies": {
     "aws-xray-sdk-core": "2.3.6"
