@@ -6,7 +6,7 @@ console.log('----------------------------------------');
 console.log('----------------------------------------');
 
 const AWSXRay = require('aws-xray-sdk-core');
-const addPromiseSegment = require('../index.js').addPromiseSegment;
+const { addPromiseSegment, addSegment } = require('../index.js');
 const Enquirer = require('enquirer');
 
 process.env.LAMBDA_TASK_ROOT = 'The taskiest root of them all';
@@ -76,6 +76,7 @@ async function basicTracing() {
 (async function() {
     const BASIC_EXAMPLE = 'Basic';
     const NESTED_EXAMPLE = 'Nested';
+    const ADD_SEGMENT = 'addSegment';
 
     enquirer = new Enquirer();
     const response = await enquirer.prompt({
@@ -84,7 +85,8 @@ async function basicTracing() {
         message: 'Which example?',
         choices: [
             BASIC_EXAMPLE,
-            NESTED_EXAMPLE
+            NESTED_EXAMPLE,
+            ADD_SEGMENT
         ]
     });
 
@@ -92,6 +94,8 @@ async function basicTracing() {
         return basicTracing();
     } else if(response.example === NESTED_EXAMPLE) {
         return nestedTracing();
+    } else if(response.example === ADD_SEGMENT) {
+        return runWithTracing(() => addSegment('add-segment-example', Promise.resolve({ all: 'of it works' })));
     }
 })()
     .then(console.log)
