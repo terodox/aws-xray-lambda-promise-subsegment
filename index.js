@@ -22,7 +22,7 @@ function addAnnotations(subSegment, annotations) {
     }
 }
 
-module.exports.addPromiseSegment = async function ({
+async function addPromiseSegment ({
     annotations,
     parentSegment,
     promiseFactory,
@@ -64,4 +64,16 @@ module.exports.addPromiseSegment = async function ({
             reject(err);
         }
     });
+};
+
+async function addSegment (segmentName, promise) {
+    return addPromiseSegment({
+        segmentName,
+        promiseFactory: () => promise
+    })
+}
+
+module.exports = {
+    addPromiseSegment,
+    addSegment
 };

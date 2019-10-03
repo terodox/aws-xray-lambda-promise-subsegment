@@ -18,3 +18,5 @@ export declare function addPromiseSegment<T>({
     promiseFactory: (subsegment) => Promise<T>,
     segmentName: string
 }): Promise<T>;
+
+export declare function addSegment<T>(segmentName: string, promise: Promise): Promise<T>;
