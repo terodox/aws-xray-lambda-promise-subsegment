@@ -19,4 +19,4 @@ export declare function addPromiseSegment<T>({
     segmentName: string
 }): Promise<T>;
 
-export declare function addSegment<T>(segmentName: string, promise: Promise): Promise<T>;
+export declare function addSegment<T>(segmentName: string, promise: Promise<any>): Promise<T>;
