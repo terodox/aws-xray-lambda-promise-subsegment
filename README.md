@@ -129,3 +129,7 @@ const promiseWrappedInSubsegment = addPromiseSegment({
     }
 });
 ```
+
+## Contributors
+
+A special thanks to everyone [who has contributed!](CONTRIBUTORS.md)
