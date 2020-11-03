@@ -23,7 +23,7 @@ steps:
   - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
   - npm test
 
-  - name: test12
+- name: test12
   pull: default
   image: node:12
   depends_on:
@@ -32,7 +32,7 @@ steps:
   - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
   - npm test
 
-  - name: test14
+- name: test14
   pull: default
   image: node:14
   depends_on:
