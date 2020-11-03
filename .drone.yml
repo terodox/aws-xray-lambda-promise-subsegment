@@ -45,9 +45,9 @@ steps:
   pull: default
   image: node:14
   depends_on:
-  - test8
   - test10
   - test12
+  - test14
   commands:
   - echo "//registry.npmjs.org/:_authToken=$${NPM_DEPLOY_TOKEN}" > ~/.npmrc
   - echo "unsafe-perm=true" >> ~/.npmrc
