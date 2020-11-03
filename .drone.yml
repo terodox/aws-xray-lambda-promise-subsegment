@@ -9,19 +9,10 @@ platform:
 steps:
 - name: install
   pull: default
-  image: node:10
+  image: node:14
   commands:
   - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
   - npm ci
-
-- name: test8
-  pull: default
-  image: node:8
-  depends_on:
-  - install
-  commands:
-  - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
-  - npm test
 
 - name: test10
   pull: default
@@ -32,7 +23,7 @@ steps:
   - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
   - npm test
 
-- name: test12
+  - name: test12
   pull: default
   image: node:12
   depends_on:
@@ -41,9 +32,18 @@ steps:
   - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
   - npm test
 
+  - name: test14
+  pull: default
+  image: node:14
+  depends_on:
+  - install
+  commands:
+  - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
+  - npm test
+
 - name: deploy
   pull: default
-  image: node:10
+  image: node:14
   depends_on:
   - test8
   - test10
