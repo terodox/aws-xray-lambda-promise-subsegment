@@ -1,3 +1,5 @@
+export {SegmentLike, Segment, Subsegment, TraceID, SegmentUtils} from 'aws-xray-sdk-core';
+
 export interface Metadata {
     [id: string]: string | object | number | boolean;
 }
