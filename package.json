@@ -34,14 +34,14 @@
   },
   "homepage": "https://github.com/terodox/aws-xray-lambda-promise-subsegment#readme",
   "devDependencies": {
-    "chai": "4.3.4",
+    "chai": "4.3.6",
     "chai-as-promised": "7.1.1",
     "enquirer": "2.3.6",
     "mocha": "^9.2.2",
     "mock-require": "3.0.3",
-    "sinon": "11.1.2"
+    "sinon": "13.0.1"
   },
   "dependencies": {
-    "aws-xray-sdk-core": "3.3.3"
+    "aws-xray-sdk-core": "3.3.4"
   }
 }
