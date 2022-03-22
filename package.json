@@ -42,6 +42,6 @@
     "sinon": "11.1.2"
   },
   "dependencies": {
-    "aws-xray-sdk-core": "3.3.3"
+    "aws-xray-sdk-core": "3.3.4"
   }
 }
