@@ -1,6 +1,6 @@
 {
   "name": "aws-xray-lambda-promise-subsegment",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Allows adding a subsegment to XRay around any promise",
   "main": "index.js",
   "scripts": {
