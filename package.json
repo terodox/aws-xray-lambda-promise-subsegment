@@ -39,7 +39,7 @@
     "enquirer": "2.3.6",
     "mocha": "9.2.2",
     "mock-require": "3.0.3",
-    "sinon": "13.0.1"
+    "sinon": "13.0.2"
   },
   "dependencies": {
     "aws-xray-sdk-core": "3.3.4"
