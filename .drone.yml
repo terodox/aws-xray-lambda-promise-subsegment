@@ -1,6 +1,7 @@
 ---
 kind: pipeline
 name: default
+type: docker
 
 platform:
   os: linux
@@ -8,32 +9,12 @@ platform:
 
 steps:
 - name: install
-  pull: default
-  image: node:14
+  image: node:18
   commands:
   - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
   - npm ci
 
-- name: test12
-  pull: default
-  image: node:12
-  depends_on:
-  - install
-  commands:
-  - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
-  - npm test
-
-- name: test14
-  pull: default
-  image: node:14
-  depends_on:
-  - install
-  commands:
-  - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
-  - npm test
-
 - name: test16
-  pull: default
   image: node:16
   depends_on:
   - install
@@ -41,13 +22,28 @@ steps:
   - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
   - npm test
 
-- name: deploy
-  pull: default
-  image: node:14
+- name: test18
+  image: node:18
   depends_on:
-  - test12
-  - test14
+  - install
+  commands:
+  - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
+  - npm test
+
+- name: test20
+  image: node:20
+  depends_on:
+  - install
+  commands:
+  - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
+  - npm test
+
+- name: deploy
+  image: node:18
+  depends_on:
   - test16
+  - test18
+  - test20
   commands:
   - echo "//registry.npmjs.org/:_authToken=$${NPM_DEPLOY_TOKEN}" > ~/.npmrc
   - echo "unsafe-perm=true" >> ~/.npmrc
