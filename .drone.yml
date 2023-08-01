@@ -9,13 +9,13 @@ platform:
 
 steps:
 - name: install
-  image: node:18
+  image: node:20
   commands:
   - echo "//registry.npmjs.org/:_authToken=$${NPM_INSTALL_TOKEN}" > ~/.npmrc
   - npm ci
 
 - name: test16
-  image: node:16
+  image: node:20
   depends_on:
   - install
   commands:
@@ -23,7 +23,7 @@ steps:
   - npm test
 
 - name: test18
-  image: node:18
+  image: node:20
   depends_on:
   - install
   commands:
@@ -39,7 +39,7 @@ steps:
   - npm test
 
 - name: deploy
-  image: node:18
+  image: node:20
   depends_on:
   - test16
   - test18
