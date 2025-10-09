@@ -31,7 +31,7 @@ steps:
   - npm test
 
 - name: test20
-  image: node:20
+  image: node:24
   depends_on:
   - install
   commands:
